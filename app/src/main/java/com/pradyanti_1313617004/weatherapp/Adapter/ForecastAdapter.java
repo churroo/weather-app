@@ -70,7 +70,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ListVi
                 onItemClickCallBack.onItemClicked(mForecastListDay.get(holder.getAdapterPosition()));
             }
         });
-
     }
 
     @Override

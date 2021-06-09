@@ -1,13 +1,16 @@
 package com.pradyanti_1313617004.weatherapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateFormat;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,12 +22,13 @@ import com.pradyanti_1313617004.weatherapp.Adapter.ForecastAdapter;
 import com.pradyanti_1313617004.weatherapp.Model.CurrentModel;
 import com.pradyanti_1313617004.weatherapp.Model.ForecastDay;
 import com.pradyanti_1313617004.weatherapp.Model.ForecastModel;
+import com.pradyanti_1313617004.weatherapp.Model.HistoryModel;
 import com.pradyanti_1313617004.weatherapp.Retrofit.ApiClient;
 import com.pradyanti_1313617004.weatherapp.Retrofit.ApiInterface;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -36,8 +40,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     TextView last_update, temp_c, location, condition, cloud, humidity, precip_mm, pressure_mb, wind_kph, gust_kph, us_epa_index, co, o3, no2;
-    ImageView imgCondition;
-    TextView date, avgtemp, forecast_condition;
+    ImageView imgCondition, history_icon;
+    TextView date, avgtemp, forecast_condition, history_date, history_condition, history_avgtemp;
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private ForecastAdapter mAdapter;
@@ -46,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private static final String TAG = "MainActivity";
     LinearLayout eror_layout;
 
+    ArrayList<ForecastDay> forecastDayList;
+    ArrayList<ForecastDay> historyList;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         refreshLayout = findViewById(R.id.swipe_refresh);
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setRefreshing(true);
-
         eror_layout = findViewById(R.id.eror_layout);
 
         location = findViewById(R.id.tv_location);
@@ -68,10 +75,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         wind_kph = findViewById(R.id.tv_wind);
         gust_kph = findViewById(R.id.tv_wind_gust);
         imgCondition = findViewById(R.id.icon_condition);
+
         us_epa_index = findViewById(R.id.tv_us_epa_index);
         co = findViewById(R.id.tv_co);
         o3 = findViewById(R.id.tv_O3);
         no2 = findViewById(R.id.tv_no2);
+
+        history_date = findViewById(R.id.tv_date_history);
+        history_condition = findViewById(R.id.tv_condition_history);
+        history_icon = findViewById(R.id.history_icon);
+        history_avgtemp = findViewById(R.id.tv_avgtemp_history);
 
         date = findViewById(R.id.tv_date);
         avgtemp = findViewById(R.id.tv_avg_temp);
@@ -85,83 +98,48 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 return false;
             }
         });
-
         mainActivity = this;
 
-        getDataForecastFromApi();
+        getHistoryDataFromApi();
 
     }
 
-    private void getDataCurrentFromApi() {
-        ApiClient.apiInterface().getCurrentData()
-                .enqueue(new Callback<CurrentModel>() {
-                    @Override
-                    public void onResponse(Call<CurrentModel> call, Response<CurrentModel> response) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getHistoryDataFromApi() {
 
-                        CurrentModel currentModel = response.body();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd ");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, -24);
+        String yesterday = dateFormat.format(calendar.getTime());
+        yesterday.replace('/', '-');
+        Log.d(TAG, String.valueOf(dateFormat.format(calendar.getTime())));
 
-                        int us_epa = currentModel.getCurrent().getAir_quality().getUs_epa_index();
-                        String result;
-                        if (us_epa == 1) {
-                            result = "Good";
-                        } else if(us_epa == 2) {
-                            result = "Moderate";
-                        } else if(us_epa == 3) {
-                            result = "Unhealthy for sensitive group";
-                        } else if(us_epa == 4) {
-                            result = "Unhealthy";
-                        } else if(us_epa == 5) {
-                            result = "Very Unhealthy";
-                        } else {
-                            result = "Hazardous";
-                        }
+        ApiClient.apiInterface().getHistoryData("history.json?key=a10472fd23c5489b92b113358212305&q=Jakarta&dt=" + yesterday).enqueue(new Callback<HistoryModel>() {
+            @Override
+            public void onResponse(Call<HistoryModel> call, Response<HistoryModel> response) {
 
-                        location.setText(currentModel.getLocation().getName());
-                        String date = currentModel.getCurrent().getLast_updated();
-                        Date date_time = new Date();
-                        try {
-                            date_time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        String new_date = new SimpleDateFormat("E, dd MMM HH:mm").format(date_time);
-                        last_update.setText(new_date);
-                        double temp = currentModel.getCurrent().getTemp_c();
-                        temp_c.setText((int)temp + "°C");
-                        condition.setText(currentModel.getCurrent().getCondition().getText());
-                        cloud.setText(Integer.toString(currentModel.getCurrent().getCloud()) + "%");
-                        humidity.setText(Integer.toString(currentModel.getCurrent().getHumidity()) + "%");
-                        precip_mm.setText(Double.toString(currentModel.getCurrent().getPrecip_mm()) + " mm");
-                        double pressure = currentModel.getCurrent().getPressure_mb();
-                        pressure_mb.setText((int) pressure + " mb");
-                        wind_kph.setText(Double.toString(currentModel.getCurrent().getWind_kph()) + " km/h");
-                        gust_kph.setText(Double.toString(currentModel.getCurrent().getGust_kph()) + " km/h");
-                        Glide.with(MainActivity.this)
-                                .load("http:" + currentModel.getCurrent().getCondition().getIcon())
-                                .into(imgCondition);
-                        us_epa_index.setText(result);
-                        co.setText(Float.toString(currentModel.getCurrent().getAir_quality().getCo()) + " μg/m3");
-                        o3.setText(Float.toString(currentModel.getCurrent().getAir_quality().getO3())+ " μg/m3");
-                        no2.setText(Float.toString(currentModel.getCurrent().getAir_quality().getNo2())+ " μg/m3");
-                        Log.d(TAG, "onResponse: Berhasil masuk on respone Current");
+                 historyList = response.body().getForecast().getForecastDayList();
 
-                        getDataForecastFromApi();
+                Log.d(TAG, "onResponse: Sukses masuk on respone history");
+                eror_layout.setVisibility(View.GONE);
 
-                    }
+                getDataForecastFromApi();
+            }
 
-                    @Override
-                    public void onFailure(Call<CurrentModel> call, Throwable t) {
-                        Log.d(TAG, "onFailure: Gagal ambil data Current");
-                        refreshLayout.setRefreshing(false);
-                        condition.setText(t.getMessage());
+            @Override
+            public void onFailure(Call<HistoryModel> call, Throwable t) {
+                refreshLayout.setRefreshing(false);
+                Log.d(TAG, "onFailure: Gagal masuk history");
+                eror_layout.setVisibility(View.VISIBLE);
+            }
+        });
 
-                    }
-                });
     }
 
     private void getDataForecastFromApi() {
         ApiClient.apiInterface().getForecastData()
                 .enqueue(new Callback<ForecastModel>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(Call<ForecastModel> call, Response<ForecastModel> response) {
 
@@ -211,7 +189,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         o3.setText(Float.toString(forecastModel.getCurrent().getAir_quality().getO3())+ " μg/m3");
                         no2.setText(Float.toString(forecastModel.getCurrent().getAir_quality().getNo2())+ " μg/m3");
 
-                        ArrayList<ForecastDay> forecastDayList = response.body().getForecast().getForecastDayList();
+                        String date_history = historyList.get(0).getDate();
+                        Date date_time_history = new Date();
+                        try {
+                            date_time_history = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(date_history);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        String format_date_history = new java.text.SimpleDateFormat("E, dd MMM").format(date_time_history);
+                        history_date.setText(format_date_history);
+                        history_condition.setText(historyList.get(0).getDay().getCondition().getText());
+                        double avg_temp = historyList.get(0).getDay().getAvgtemp_c();
+                        history_avgtemp.setText((int) avg_temp + "°C");
+                        Glide.with(MainActivity.this)
+                                .load("http:" + historyList.get(0).getDay().getCondition().getIcon())
+                                .into(history_icon);
+
+                        forecastDayList = response.body().getForecast().getForecastDayList();
 
                         mAdapter = new ForecastAdapter(forecastDayList);
                         mAdapter.notifyDataSetChanged();
@@ -248,9 +242,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh: Sukses masuk refresh");
-        getDataForecastFromApi();
+        getHistoryDataFromApi();
     }
 }

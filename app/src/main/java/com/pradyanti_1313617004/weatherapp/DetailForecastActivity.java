@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class DetailForecastActivity extends AppCompatActivity {
 
-    TextView avgTemp, maxtemp, mintemp, maxwind, total_precip, condition, date_forecast;
+    TextView avgTemp, maxtemp, mintemp, maxwind, total_precip, condition, date_forecast, detail_location;
     ImageView icon_condition_day;
     private RecyclerView recyclerView;
     private HourAdapter hourAdapter;
@@ -33,7 +33,6 @@ public class DetailForecastActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_forecast);
 
-//        String max_temp = getIntent().getStringExtra("Maxtemp");
         ForecastDay forecastDay = getIntent().getParcelableExtra("ForecastDayList");
 //        Log.d("Cek", "ForecastDay " + String.valueOf(forecastDay.size()));
 
@@ -55,9 +54,12 @@ public class DetailForecastActivity extends AppCompatActivity {
         }
         String new_date = new SimpleDateFormat("EEE, dd MMM").format(date_time);
         date_forecast.setText(new_date);
-        avgTemp.setText(Double.toString(forecastDay.getDay().getAvgtemp_c()) + "°C");
-        maxtemp.setText(Double.toString(forecastDay.getDay().getMaxtemp_c()) + "°C");
-        mintemp.setText(Double.toString(forecastDay.getDay().getMintemp_c())+ "°C");
+        double avgtemp = forecastDay.getDay().getAvgtemp_c();
+        avgTemp.setText((int)avgtemp + "°C");
+        double maxTemp = forecastDay.getDay().getMaxtemp_c();
+        maxtemp.setText((int)maxTemp + "°C");
+        double minTemp = forecastDay.getDay().getMintemp_c();
+        mintemp.setText((int)minTemp + "°C");
         maxwind.setText(Double.toString(forecastDay.getDay().getMaxwind_kph()) + " km/h");
         total_precip.setText(Double.toString(forecastDay.getDay().getTotalprecip_mm()) + " mm");
         condition.setText(forecastDay.getDay().getCondition().getText());

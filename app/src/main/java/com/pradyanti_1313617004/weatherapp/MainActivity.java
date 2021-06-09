@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
-
-
         mainActivity = this;
 
         getDataForecastFromApi();
@@ -146,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         o3.setText(Float.toString(currentModel.getCurrent().getAir_quality().getO3())+ " μg/m3");
                         no2.setText(Float.toString(currentModel.getCurrent().getAir_quality().getNo2())+ " μg/m3");
                         Log.d(TAG, "onResponse: Berhasil masuk on respone Current");
-
 
                         getDataForecastFromApi();
 
@@ -232,18 +229,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                         refreshLayout.setRefreshing(false);
                         Log.d(TAG, "onResponse: Sukses masuk on respone forecast");
-//                        refreshLayout.setVisibility(View.VISIBLE);
-//                        eror_layout.setVisibility(View.INVISIBLE);
+                        eror_layout.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<ForecastModel> call, Throwable t) {
                         refreshLayout.setRefreshing(false);
                         Log.d(TAG, "onFailure: Gagal masuk forecast");
-//                        eror_layout.setVisibility(View.VISIBLE);
-//                        refreshLayout.setVisibility(View.INVISIBLE);
-
-
+                        eror_layout.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -251,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void showForecastData(ForecastDay forecastDayData) {
         Intent intent = new Intent(MainActivity.this, DetailForecastActivity.class);
-        intent.putExtra("Maxtemp", forecastDayData.getDay().getMaxtemp_c());
         intent.putExtra("ForecastDayList", forecastDayData);
         startActivity(intent);
     }

@@ -9,13 +9,15 @@
         android:layout_height="wrap_content"
         android:background="@drawable/transparent"
         android:orientation="horizontal"
-        android:layout_margin="8dp">
+        android:weightSum="6"
+        android:layout_margin="4dp">
 
         <TextView
             android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="left"
             android:textSize="16dp"
             android:layout_marginLeft="8dp"
@@ -24,29 +26,31 @@
 
         <TextView
             android:id="@+id/tv_temp_hour"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
             android:textSize="16dp"
+            android:layout_weight="1"
             android:textColor="@color/navy"
-            android:text="Temp Hour"/>
+            android:text="Temp"/>
 
         <ImageView
             android:id="@+id/icon_condition_hour"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="16dp">
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="left"
+            android:layout_weight="1">
         </ImageView>
 
         <TextView
             android:id="@+id/tv_condition_hour"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="right"
-            android:layout_marginRight="12dp"
+            android:gravity="left"
+            android:layout_weight="3"
             android:textSize="16dp"
+            android:layout_marginLeft="8dp"
             android:textColor="@color/navy"
             android:text="Condition"/>
 

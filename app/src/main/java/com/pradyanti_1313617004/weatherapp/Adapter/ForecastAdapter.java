@@ -57,7 +57,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ListVi
         }
         String new_date = new SimpleDateFormat("E, dd MMM").format(date_time);
         holder.tvDate.setText(new_date);
-        holder.tvAvgTemp.setText(Double.toString(mForecastListDay.get(position).getDay().getAvgtemp_c()) + "°C");
+        double avg_temp = mForecastListDay.get(position).getDay().getAvgtemp_c();
+        holder.tvAvgTemp.setText((int) avg_temp + "°C");
         holder.tvCondition.setText(mForecastListDay.get(position).getDay().getCondition().getText());
         Glide.with(holder.itemView.getContext())
                 .load("http:" + mForecastListDay.get(position).getDay().getCondition().getIcon())
@@ -66,10 +67,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ListVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(v.getContext(), DetailForecastActivity.class);
-//                intent.putExtra("ForecastDayList", mForecastListDay.get(position));
-//                v.getContext().startActivity(intent);
-
                 onItemClickCallBack.onItemClicked(mForecastListDay.get(holder.getAdapterPosition()));
             }
         });

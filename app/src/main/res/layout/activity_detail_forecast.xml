@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="8dp"
     android:background="@color/light_blue"
     tools:context=".DetailForecastActivity">
 
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
+        android:paddingBottom="8dp"
         android:backgroundTint="@color/white"
         android:gravity="center_horizontal">
 
@@ -23,39 +23,49 @@
             android:layout_margin="4dp"
             app:cardBackgroundColor="@color/white"
             app:cardElevation="8dp"
-            app:cardCornerRadius="30dp">
+            app:cardCornerRadius="24dp">
 
-            <TextView
-                android:id="@+id/tv_forecast_date"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="20dp"
-                android:textSize="24dp"
-                android:textColor="@color/navy"
-                android:text="Tanggal">
-            </TextView>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_forecast_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="32dp"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:text="Tanggal"
+                    android:textColor="@color/navy"
+                    android:textSize="20dp"></TextView>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/icon_condition_day"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginHorizontal="32dp"
                         android:layout_marginLeft="8dp">
-
                     </ImageView>
 
                     <TextView
@@ -64,22 +74,109 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="4dp"
-                        android:layout_marginLeft="32dp"
+                        android:layout_marginLeft="28dp"
                         android:text="Condition day"
-                        android:textSize="12dp"
+                        android:textSize="16dp"
                         android:textColor="@color/navy"/>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_avg_temp"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:text="Average Temp"
-                    android:textColor="@color/navy"
-                    android:textSize="48dp"
-                    android:textStyle="bold"
-                    android:gravity="right"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_avg_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="12dp"
+                        android:fontFamily="sans-serif-thin"
+                        android:gravity="center"
+                        android:text="Average Temp"
+                        android:textColor="@color/navy"
+                        android:textSize="48dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:weightSum="2"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:weightSum="3"
+                            android:layout_marginTop="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="2"
+                                android:layout_marginLeft="12dp"
+                                android:gravity="center"
+                                android:text="Max temp"
+                                android:textColor="@color/navy"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:id="@+id/tv_max_temp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="20dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Max Temp"
+                                android:textColor="@color/navy"
+                                android:textSize="16dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:weightSum="3">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Min temp"
+                                android:layout_weight="2"
+                                android:layout_marginLeft="12dp"
+                                android:textColor="@color/navy"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:id="@+id/tv_min_temp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="20dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Min Temp"
+                                android:layout_weight="1"
+                                android:textColor="@color/navy"
+                                android:textSize="16dp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -88,18 +185,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="12dp"
-                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:weightSum="2"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:layout_weight="1"
                         android:layout_marginLeft="12dp">
 
@@ -107,17 +204,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Max Temp"
+                            android:text="Max wind"
                             android:textColor="@color/navy"
                             android:textSize="16dp" />
 
                         <TextView
-                            android:id="@+id/tv_max_temp"
+                            android:id="@+id/tv_max_wind"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:text="Max Temp"
-                            android:layout_marginRight="8dp"
+                            android:gravity="center"
+                            android:text="Max wind"
                             android:textColor="@color/navy"
                             android:textSize="16dp" />
 
@@ -126,65 +222,45 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="24dp">
+                        android:orientation="vertical"
+                        android:layout_weight="1">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Min Temp"
+                            android:text="Total precipitation"
                             android:textColor="@color/navy"
                             android:textSize="16dp" />
 
                         <TextView
-                            android:id="@+id/tv_min_temp"
+                            android:id="@+id/tv_total_precip"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:text="Min Temp"
+                            android:gravity="center"
+                            android:text="Total precipitation"
                             android:layout_marginRight="12dp"
+                            android:layout_marginLeft="8dp"
                             android:textColor="@color/navy"
                             android:textSize="16dp" />
                     </LinearLayout>
-
-
 
                 </LinearLayout>
 
 
             </LinearLayout>
 
-
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_max_wind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:textColor="@color/navy"
-        android:text="Max Wind"/>
-
-    <TextView
-        android:id="@+id/tv_total_precip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:textColor="@color/navy"
-        android:text="Total Precip"/>
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_hour_forecast"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_hour_forecast">
 

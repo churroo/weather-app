@@ -37,7 +37,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.ListViewHolder
         String split_date = mHourArrayList.get(position).getTime();
         String[] date = split_date.split(" ");
         holder.tv_time.setText(date[1]);
-        holder.tv_temp_hour.setText(Double.toString(mHourArrayList.get(position).getTemp())+ "°C");
+        double tempHour = mHourArrayList.get(position).getTemp();
+        holder.tv_temp_hour.setText((int) tempHour + "°C");
         holder.tv_condition_hour.setText(mHourArrayList.get(position).getCondition().getText());
         Glide.with(holder.itemView.getContext())
                 .load("http:" + mHourArrayList.get(position).getCondition().getIcon())

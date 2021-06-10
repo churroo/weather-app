@@ -10,15 +10,11 @@ import retrofit2.http.Url;
 
 public interface ApiInterface {
 
-    // 1. Ngambil current date
-    // 2. Kurangi current date sebesar 1 hari
-    // 3. Masukan yesterday date to history url
-
     @GET("forecast.json?key=a10472fd23c5489b92b113358212305&q=Jakarta&days=3&aqi=yes&alerts=no")
     Call<ForecastModel> getForecastData();
 
     @GET
-    Call<HistoryModel> getHistoryData(@Url String url);
+    Call<HistoryModel> getHistoryData(@Url String url_history);
 
 
 }

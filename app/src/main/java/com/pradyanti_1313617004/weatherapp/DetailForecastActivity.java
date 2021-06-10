@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class DetailForecastActivity extends AppCompatActivity {
 
-    TextView avgTemp, maxtemp, mintemp, maxwind, total_precip, condition, date_forecast, detail_location;
+    TextView avgTemp, maxtemp, mintemp, maxwind, total_precip, condition, date_forecast;
     ImageView icon_condition_day;
     private RecyclerView recyclerView;
     private HourAdapter hourAdapter;
@@ -45,6 +45,7 @@ public class DetailForecastActivity extends AppCompatActivity {
         icon_condition_day = findViewById(R.id.icon_condition_day);
         date_forecast = findViewById(R.id.tv_forecast_date);
 
+        //mengubah format date untuk detail activity
         String date = forecastDay.getDate();
         Date date_time = new Date();
         try {
@@ -66,7 +67,6 @@ public class DetailForecastActivity extends AppCompatActivity {
         Glide.with(DetailForecastActivity.this)
                 .load("http:" + forecastDay.getDay().getCondition().getIcon())
                 .into(icon_condition_day);
-
 
         recyclerView = findViewById(R.id.rv_hour_forecast);
         mLayoutManager = new LinearLayoutManager(this);

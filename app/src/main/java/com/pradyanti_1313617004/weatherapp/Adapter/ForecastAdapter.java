@@ -49,6 +49,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ListVi
     @Override
     public void onBindViewHolder(ForecastAdapter.ListViewHolder holder, int position) {
         String date = mForecastListDay.get(position).getDate();
+        //mengubah format date pada recycle view
         Date date_time = new Date();
         try {
             date_time = new SimpleDateFormat("yyyy-MM-dd").parse(date);
